@@ -3,7 +3,10 @@ import pandas as pd
 df = pd.read_csv('black-friday.csv')
 
 # Dropping User_ID and Product_ID as they are useless
-df = df.drop(['User_ID', 'Product_ID'], axis=1)
+#
+# EDIT: Not useless
+#
+# df = df.drop(['User_ID', 'Product_ID'], axis=1)
 
 # Product_Category_2 has many missing values (~31%) and appears bimodal so it
 # was discarded; Product_Category_3 has a strong mode but the number of missing
