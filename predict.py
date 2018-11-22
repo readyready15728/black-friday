@@ -4,7 +4,7 @@ import pickle
 import xgboost as xgb
 from pathlib import Path
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from sklearn.preprocessing import OrdinalEncoder
 
 df = pd.read_csv('cleaned.csv')
@@ -32,14 +32,17 @@ target = df[target]
 
 X_train, X_test, y_train, y_test = train_test_split(features, target, random_state=42)
 
-if not Path('model.pkl').is_file():
-    # Parameters suggested by previous top scorers from a RandomizedSearchCV
-    param_grid = {'colsample_bytree': [1],
-                  'learning_rate': [0.05, 0.1, 0.3],
-                  'max_depth': [5, 8],
-                  'n_estimators': [100]}
+if not Path('models.pkl').is_file():
+    param_grid = {'colsample_bytree': [0.8, 1],
+                  # gamma of 0 was shown to be quite useless in previous runs and has been omitted
+                  'gamma': [1, 5],
+                  'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3],
+                  'max_depth': [3, 5, 7],
+                  # I am using a dual-core processor; change n_jobs to suit environment
+                  'n_jobs': [2],
+                  'subsample': [0.8, 1]}
 
-    model = GridSearchCV(xgb.XGBRegressor(), param_grid, cv=3, verbose=100)
+    model = RandomizedSearchCV(xgb.XGBRegressor(), param_grid, cv=3, n_iter=100, verbose=100)
     model.fit(X_train, y_train)
 
     with open('model.pkl', 'wb') as f:
