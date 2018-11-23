@@ -32,7 +32,7 @@ target = df[target]
 
 X_train, X_test, y_train, y_test = train_test_split(features, target, random_state=42)
 
-if not Path('models.pkl').is_file():
+if not Path('model.pkl').is_file():
     param_grid = {'colsample_bytree': [0.8, 1],
                   # gamma of 0 was shown to be quite useless in previous runs and has been omitted
                   'gamma': [1, 5],
