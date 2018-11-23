@@ -53,5 +53,5 @@ else:
 
 y_pred = model.predict(X_test)
 
-print('SD of y_test:', np.std(y_test))
-print('RMSE of y_pred:', np.sqrt(mean_squared_error(y_pred, y_test)))
+print('SD of y_test:', '%.2f' % np.std(y_test))
+print('RMSE of y_pred:', '%.2f' % np.sqrt(mean_squared_error(y_pred, y_test)))
