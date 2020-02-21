@@ -38,8 +38,8 @@ if not Path('model.pkl').is_file():
                   'gamma': [1, 5],
                   'learning_rate': [0.01, 0.05, 0.1, 0.2, 0.3],
                   'max_depth': [3, 5, 7],
-                  # I am using a dual-core processor; change n_jobs to suit environment
-                  'n_jobs': [2],
+                  # I am using an octa-core processor; change n_jobs to suit environment
+                  'n_jobs': [8],
                   'subsample': [0.8, 1]}
 
     model = RandomizedSearchCV(xgb.XGBRegressor(), param_grid, cv=3, n_iter=100, verbose=100)
@@ -52,6 +52,9 @@ else:
         model = pickle.load(f)
 
 y_pred = model.predict(X_test)
+
+print(y_test.reset_index(drop=True).head(20))
+print(pd.DataFrame(y_pred).head(20))
 
 print('SD of y_test:', '%.2f' % np.std(y_test))
 print('RMSE of y_pred:', '%.2f' % np.sqrt(mean_squared_error(y_pred, y_test)))
